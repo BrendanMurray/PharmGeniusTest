@@ -129,5 +129,43 @@ public class UserTestCases {
 		String URL = driver.getCurrentUrl();
 		if (!URL.contains("takeQuiz?category=PHARM+5218&number=10")) fail();
 	}
+	
+	
+	//start quiz.
+	//submit modal
+	//store question text in array and hit an answer x 5
+	//check to see if collected question text appears on results page
+	//This runs through the default quiz (PHARM 2001, 5 questions) and checks the result page
+	//If any of the user answers are not found on the results page, it fails
+	@Test
+	public void testQuizResults(){
+		driver.get(baseUrl);
+		driver.findElement(By.id("on-play")).click();
+		driver.findElement(By.id("startQuiz")).click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		}
+		driver.findElement(By.id("gobutton")).click();
+		String questionText[] = new String[5];
+		for (int x = 0 ; x < 5; x++){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+			questionText[x] = driver.findElement(By.id("answer1")).getText();
+			driver.findElement(By.id("answer1")).click();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+			driver.findElement(By.id("nextquestionbutton")).click();
+		}
+		try { Thread.sleep(1000); } catch (InterruptedException e) {}
+		Object test = ((JavascriptExecutor) driver).executeScript("return document.getElementsByTagName('html')[0].innerHTML;");
+		for (int x = 0; x < 5; x ++){
+			if (!test.toString().contains(questionText[x])) fail();
+		}
+	}
 
 }
