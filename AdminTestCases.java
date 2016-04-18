@@ -139,4 +139,23 @@ public class AdminTestCases {
 		} catch (InterruptedException e) {
 		}
 	}
+	
+	//Test that the View Database link displays a question in the database.
+	//From the homepage it selects the Questions dropdown and clicks on View Database
+	//It gives the js a second to run and then searches the page's source for a given question text
+	//If that question text was not rendered the test fails
+	@Test
+	public void testViewDatabase(){
+		driver.get(baseUrl);
+		try{
+			driver.findElement(By.id("Questions")).click();
+			driver.findElement(By.id("reviewOld")).click();
+			Thread.sleep(1000);
+			Object test = ((JavascriptExecutor) driver).executeScript("return document.getElementsByTagName('html')[0].innerHTML;");
+			if (!test.toString().contains("Abilify (Aripirazole) can be classified as which of the following types of drugs?")) fail();
+		} catch (NoSuchElementException nseex) {
+			fail();
+		} catch (InterruptedException e) {
+		}
+	}
 }
