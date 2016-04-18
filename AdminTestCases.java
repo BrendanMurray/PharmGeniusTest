@@ -10,6 +10,7 @@ public class AdminTestCases {
 	static WebDriver driver = new FirefoxDriver();
 	static String baseUrl = "http://localhost:9080/";
 	
+	//Before any unit tests run, log into test@example.com account as an administrator
 	@BeforeClass
 	public static void beforeAllSetUp() throws Exception{
 		driver.get(baseUrl);
@@ -21,6 +22,8 @@ public class AdminTestCases {
 		driver.findElement(By.id("submit-login")).click();
 	}
 	
+	//Test that the navigation bar's Profile link redirects to the profile page
+	//This is a duplicate test from UserTestCases.java
 	@Test
 	public void testProfileLink(){
 		driver.get(baseUrl);
@@ -33,6 +36,8 @@ public class AdminTestCases {
 		}
 	}
 	
+	//Test that the navigation bar's Leaderboard link redirects to the leaderboard page
+	//This is a duplicate test from UserTestCases.java
 	@Test
 	public void testLeaderboardLink(){
 		driver.get(baseUrl);
@@ -45,6 +50,7 @@ public class AdminTestCases {
 		}
 	}
 	
+	//Test that the Questions dropdown's Submit New Question link redirects to the appropriate page
 	@Test
 	public void testSubmitNewLink(){
 		driver.get(baseUrl);
@@ -58,6 +64,8 @@ public class AdminTestCases {
 		}
 	}
 	
+	//Test that the Questions dropdown's Review New Questions link redirects to the appropriate page
+	//This is an administrator only page
 	@Test
 	public void testReviewNewLink(){
 		driver.get(baseUrl);
@@ -71,6 +79,8 @@ public class AdminTestCases {
 		}
 	}
 	
+	//Test that the Questions dropdown's Review Old Questions link redirects to the appropriate page
+	//This is an administrator only page
 	@Test
 	public void testReviewOldLink(){
 		driver.get(baseUrl);
@@ -84,6 +94,9 @@ public class AdminTestCases {
 		}
 	}
 	
+	//Test that an administrator can submit a question.
+	//It populates the questionText field and the 4 answer fields before selecting the 2nd option as the answer
+	//Then it checks that the question has been successfully submitted, which is indicated on a confirmation page
 	@Test
 	public void testSubmitQuestion(){
 		driver.get(baseUrl);
@@ -107,16 +120,23 @@ public class AdminTestCases {
 		}
 	}
 	
+	//Test that the question submitted by testSubmitQuestion() is shown on the Review New Question page
+	//This is only possible with administrator access.
+	//This test WILL FAIL on first run if it loses a race condition with testSubmitQuestion.
+	//It should pass on any consecutive run of the test suite.
+	//It selects Review New Questions from the Questions dropdown in the nav bar and looks for the question text.
 	@Test
 	public void testReviewQuestion(){
 		driver.get(baseUrl);
 		try{
 			driver.findElement(By.id("Questions")).click();
 			driver.findElement(By.id("reviewNew")).click();
-			if (!driver.getPageSource().contains("What is your favorite color?")) fail();
+			Thread.sleep(1000);
+			Object test = ((JavascriptExecutor) driver).executeScript("return document.getElementsByTagName('html')[0].innerHTML;");
+			if (!test.toString().contains("What is your favorite color?")) fail();
 		} catch (NoSuchElementException nseex) {
 			fail();
+		} catch (InterruptedException e) {
 		}
 	}
-	
 }

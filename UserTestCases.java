@@ -10,6 +10,7 @@ public class UserTestCases {
 	static WebDriver driver = new FirefoxDriver();
 	static String baseUrl = "http://localhost:9080/";
 	
+	//Before any unit tests run, log into test@example.com account as a regular user (!admin)
 	@BeforeClass
 	public static void beforeAllSetUp() throws Exception{
 		driver.get(baseUrl);
@@ -20,6 +21,7 @@ public class UserTestCases {
 		driver.findElement(By.id("submit-login")).click();
 	}
 	
+	//Test that the navigation bar's Profile link redirects to the profile page
 	@Test
 	public void testProfileLink(){
 		driver.get(baseUrl);
@@ -32,6 +34,7 @@ public class UserTestCases {
 		}
 	}
 	
+	//Test that the navigation bar's Leaderboard link redirects to the leaderboard page
 	@Test
 	public void testLeaderboardLink(){
 		driver.get(baseUrl);
@@ -44,6 +47,7 @@ public class UserTestCases {
 		}
 	}
 	
+	//This tests the homepage's play button. It validates the GET information of the start quiz form
 	@Test
 	public void testRunGame(){
 		driver.get(baseUrl);
@@ -53,6 +57,9 @@ public class UserTestCases {
 		if (!URL.contains("takeQuiz?category=PHARM+2001&number=5")) fail();
 	}
 	
+	//This is the first test that validates the quiz options.
+	//It changes the first dropdown to select 'PHARM 3023' and leaves the second dropdown at '5'
+	//Once the start quiz button is selected it validates the GET information in the URL
 	@Test
 	public void testRunGame3023and5(){
 		driver.get(baseUrl);
@@ -65,6 +72,9 @@ public class UserTestCases {
 		if (!URL.contains("takeQuiz?category=PHARM+3023&number=5")) fail();
 	}
 	
+	//This tests both quiz dropdown options.
+	//It changes the first dropdown to 'PHARM 3023' and the second to '10'
+	//It then runs the game and validates the GET information in the URL
 	@Test
 	public void testRunGame3023and10(){
 		driver.get(baseUrl);
@@ -78,6 +88,7 @@ public class UserTestCases {
 		if (!URL.contains("takeQuiz?category=PHARM+3023&number=10")) fail();
 	}
 	
+	//This is tests the 3rd selection in the category dropdown on run game
 	@Test
 	public void testRunGame3028and10(){
 		driver.get(baseUrl);
@@ -91,6 +102,7 @@ public class UserTestCases {
 		if (!URL.contains("takeQuiz?category=PHARM+3028&number=10")) fail();
 	}
 	
+	//This is tests the 4th selection in the category dropdown on run game
 	@Test
 	public void testRunGame3040and10(){
 		driver.get(baseUrl);
@@ -104,6 +116,7 @@ public class UserTestCases {
 		if (!URL.contains("takeQuiz?category=PHARM+3040&number=10")) fail();
 	}
 	
+	//This is tests the 5th selection in the category dropdown on run game
 	@Test
 	public void testRunGame5218and10(){
 		driver.get(baseUrl);
