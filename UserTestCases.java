@@ -142,29 +142,40 @@ public class UserTestCases {
 		driver.get(baseUrl);
 		driver.findElement(By.id("on-play")).click();
 		driver.findElement(By.id("startQuiz")).click();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-		}
+		
+		try { Thread.sleep(1000); } catch (InterruptedException e) {}
+		
 		driver.findElement(By.id("gobutton")).click();
 		String questionText[] = new String[5];
 		for (int x = 0 ; x < 5; x++){
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
+			try { Thread.sleep(1000); } catch (InterruptedException e) {}
+			
 			questionText[x] = driver.findElement(By.id("answer1")).getText();
 			driver.findElement(By.id("answer1")).click();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
+			
+			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 			driver.findElement(By.id("nextquestionbutton")).click();
 		}
+		
 		try { Thread.sleep(1000); } catch (InterruptedException e) {}
+		
 		Object test = ((JavascriptExecutor) driver).executeScript("return document.getElementsByTagName('html')[0].innerHTML;");
 		for (int x = 0; x < 5; x ++){
 			if (!test.toString().contains(questionText[x])) fail();
+		}
+	}
+	
+	//This is an admin page that should not be accessible to users.
+	//If the user visits the link they should be told they do not have access to the page.
+	@Test
+	public void testLockoutReviewOldLink(){
+		driver.get(baseUrl+"ReviewOldQuestions");
+		try{
+			try { Thread.sleep(500); } catch (InterruptedException e) {}
+			Object test = ((JavascriptExecutor) driver).executeScript("return document.getElementsByTagName('html')[0].innerHTML;");
+			if (!test.toString().contains("You Must Be An Admin to View This Page!")) fail();
+		} catch (NoSuchElementException nseex) {
+			fail();
 		}
 	}
 
